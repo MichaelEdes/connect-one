@@ -23,7 +23,7 @@ export function useFetchDataAtInterval({
   const fetchTime = useCallback(async () => {
     try {
       const response = await axios.get("http://localhost:3001/time");
-      setServerTime(response.data.epoch);
+      setServerTime(response.data.properties.epoch.value);
     } catch (err) {
       console.error(err);
     }

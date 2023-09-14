@@ -20,7 +20,16 @@ app.use(
 
 app.get("/time", (req, res) => {
   res.json({
-    epoch: Math.floor(Date.now() / 1000),
+    properties: {
+      epoch: {
+        value: Math.floor(Date.now() / 1000),
+        description:
+          "The current server time, in epoch seconds, at time of processing the request.",
+        type: "number",
+      },
+    },
+    required: ["epoch"],
+    type: "object",
   });
 });
 app.get("/metrics", (req, res) => {});
