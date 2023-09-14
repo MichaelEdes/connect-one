@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useFetchTimeAtInterval } from "../hooks/useFetchTimeAtInterval";
+import {
+  FetchDataTypesE,
+  useFetchDataAtInterval,
+} from "../hooks/useFetchTimeAtInterval";
 
 const ServerTime = () => {
-  const { serverTime } = useFetchTimeAtInterval({
+  const { serverTime } = useFetchDataAtInterval({
     timeInterval: 30000,
+    dataType: FetchDataTypesE.Server,
   });
   const [currentTime, setCurrentTime] = useState<number>();
   const [timeDifference, setTimeDifference] = useState<string>("00:00:00");

@@ -1,16 +1,24 @@
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
-type UseFetchTimeAtIntervalPropsT = {
+type UseFetchDataAtIntervalPropsT = {
   timeInterval: number;
+  dataType: FetchDataTypesE.Prometheus | FetchDataTypesE.Server;
 };
+
+export enum FetchDataTypesE {
+  Prometheus = "prometheus",
+  Server = "server",
+}
 
 //UseFetchTimeAtInterval function that takes interval as argument and sets interval to given value so data is fetched at each time increment
 
-export function useFetchTimeAtInterval({
+export function useFetchDataAtInterval({
   timeInterval,
-}: UseFetchTimeAtIntervalPropsT) {
+  dataType,
+}: UseFetchDataAtIntervalPropsT) {
   const [serverTime, setServerTime] = useState<number>();
+  const [prometheusData, setPrometheusData] = useState();
 
   const fetchTime = useCallback(async () => {
     try {
@@ -21,11 +29,27 @@ export function useFetchTimeAtInterval({
     }
   }, []);
 
-  useEffect(() => {
-    fetchTime();
-    const interval = setInterval(fetchTime, timeInterval);
-    return () => clearInterval(interval);
-  }, [fetchTime, timeInterval]);
+  const fetchPromData = useCallback(async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/metrics");
+      setPrometheusData(response.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
-  return { serverTime, fetchTime };
+  const fetchDataFunction =
+    dataType === "prometheus" ? fetchPromData : fetchTime;
+
+  useEffect(() => {
+    dataType === "prometheus" ? fetchPromData() : fetchTime();
+    const interval = setInterval(fetchDataFunction, timeInterval);
+    return () => clearInterval(interval);
+  }, [fetchDataFunction, timeInterval]);
+
+  if (dataType === "prometheus") {
+    return { prometheusData, fetchPromData };
+  } else {
+    return { serverTime, fetchTime };
+  }
 }

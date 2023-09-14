@@ -19,11 +19,9 @@ app.use(
 );
 
 app.get("/time", (req, res) => {
-  setTimeout(() => {
-    res.json({
-      epoch: Math.floor(Date.now() / 1000),
-    });
-  }, 3000); // 3000 milliseconds = 3 seconds
+  res.json({
+    epoch: Math.floor(Date.now() / 1000),
+  });
 });
 app.get("/metrics", (req, res) => {});
 

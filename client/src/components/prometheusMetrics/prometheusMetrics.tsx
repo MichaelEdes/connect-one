@@ -1,28 +1,15 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import styles from "./prometheusMetrics.module.scss";
+import {
+  FetchDataTypesE,
+  useFetchDataAtInterval,
+} from "../hooks/useFetchTimeAtInterval";
 
 const PrometheusMetrics = () => {
-  const [prometheusData, setPrometheusData] = useState();
-
-  useEffect(() => {
-    const fetchPromData = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/metrics");
-        setPrometheusData(response.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchPromData();
-
-    const interval = setInterval(() => {
-      fetchPromData();
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, []);
+  const { prometheusData } = useFetchDataAtInterval({
+    timeInterval: 30000,
+    dataType: FetchDataTypesE.Prometheus,
+  });
 
   return (
     <div className={styles.container}>
