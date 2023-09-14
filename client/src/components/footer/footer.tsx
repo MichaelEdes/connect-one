@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
     <footer>
-      <h3>Footer</h3>
+      <h3>Michael Edes</h3>
     </footer>
   );
 };
