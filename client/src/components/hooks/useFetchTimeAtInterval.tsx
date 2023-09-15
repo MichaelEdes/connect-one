@@ -11,7 +11,7 @@ export enum FetchDataTypesE {
   Server = "server",
 }
 
-//UseFetchTimeAtInterval function that takes interval as argument and sets interval to given value so data is fetched at each time increment
+//UseFetchTimeAtInterval function that takes dataType and interval as argument and sets interval to given value so given dataType is fetched at each time increment
 
 export function useFetchDataAtInterval({
   timeInterval,
@@ -19,10 +19,15 @@ export function useFetchDataAtInterval({
 }: UseFetchDataAtIntervalPropsT) {
   const [serverTime, setServerTime] = useState<number>();
   const [prometheusData, setPrometheusData] = useState();
+  const authToken = "mysecrettoken";
 
   const fetchTime = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:3001/time");
+      const response = await axios.get("http://localhost:3001/time", {
+        headers: {
+          Authorization: authToken,
+        },
+      });
       setServerTime(response.data.properties.epoch.value);
     } catch (err) {
       console.error(err);
@@ -31,7 +36,11 @@ export function useFetchDataAtInterval({
 
   const fetchPromData = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:3001/metrics");
+      const response = await axios.get("http://localhost:3001/metrics", {
+        headers: {
+          Authorization: authToken,
+        },
+      });
       setPrometheusData(response.data);
     } catch (err) {
       console.error(err);

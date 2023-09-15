@@ -6,15 +6,24 @@ const app = express();
 app.use(cors());
 
 const PORT = 3001;
+const authToken = "mysecrettoken";
+
+app.use((req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (authHeader !== authToken) {
+    return res
+      .status(403)
+      .json({ message: "Forbidden: Invalid or missing authorization token." });
+  }
+
+  next();
+});
 
 app.use(
   expressPrometheus({
     metricsPath: "/metrics",
     collectDefaultMetrics: true,
-    // requestDurationBuckets: [0.1, 0.5, 1, 1.5],
-    // requestLengthBuckets: [512, 1024, 5120, 10240, 51200, 102400],
-    // responseLengthBuckets: [512, 1024, 5120, 10240, 51200, 102400],
-    // authenticate: (req) => req.headers.authorization === "Basic mysecrettoken",
   })
 );
 
