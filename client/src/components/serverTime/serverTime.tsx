@@ -45,7 +45,7 @@ const ServerTime = () => {
   return (
     <div>
       <h1>Server Time: </h1>
-      <div>{serverTime}</div>
+      <div>{serverTime ? serverTime : "Loading..."}</div>
       <h1>Time Difference: </h1>
       <div>{timeDifference}</div>
     </div>

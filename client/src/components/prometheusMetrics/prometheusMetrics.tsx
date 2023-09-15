@@ -14,7 +14,7 @@ const PrometheusMetrics = () => {
   return (
     <div className={styles.container}>
       <h1>Prometheus Metrics</h1>
-      <pre>{prometheusData}</pre>
+      <pre>{prometheusData ? prometheusData : "Loading..."}</pre>
     </div>
   );
 };
