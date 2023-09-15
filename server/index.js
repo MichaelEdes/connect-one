@@ -41,7 +41,6 @@ app.get("/time", (req, res) => {
     type: "object",
   });
 });
-app.get("/metrics", (req, res) => {});
 
 app.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);
